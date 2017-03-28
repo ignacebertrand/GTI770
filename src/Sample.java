@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -49,7 +50,7 @@ public class Sample {
 		}
 	}
 	
-	private static void cleanData(String inFolder, String outFolder) {
+	private static void cleanData(String inFolder, String outFolder) throws IOException {
 		// TODO Auto-generated method stub
 		Writer writer = new BufferedWriter(new OutputStreamWriter(
 	              new FileOutputStream(outFolder), "utf-8")); 
@@ -78,86 +79,6 @@ public class Sample {
 	    
 	}
 
-	public static List<String> readFile(String path) throws IOException
-	{
-		BufferedReader reader = new BufferedReader(new FileReader(path));
-		List<String> lines = new ArrayList<>();
-		String line;
-		int progressIndex = 0;
-		int lineCount = 0;
-	       while ((line = reader.readLine()) != null) { 
-	         if (line.startsWith("@"))
-	         {
-	        	 if (line.contains("@attribute SAMPLEID") || line.contains("@attribute TRACKID"))
-	        	 {
-	        		 continue;	 
-	        	 }
-	         }
-	         if (line.contains(","))
-	         {
-	        	int startOfFilteredLine =  line.indexOf(",");
-	        	startOfFilteredLine = line.indexOf(",", startOfFilteredLine+1);
-	        	line = line.substring(startOfFilteredLine + 1);
-	        	
-	         }
-	         lineCount++;
-	         progressIndex++;
-	         if (progressIndex == 200)
-	         {
-	        	 progressIndex = 0;
-	        	 System.out.println("Processed " + lineCount + " lines");
-	         }
-	         
-	         lines.add(line);
-	       }
-	       return lines;
-	       
-	}
-	
-	public static Instances readData(String path) throws Exception
-	{
-		
-		BufferedReader reader = new BufferedReader(new FileReader(path));
-		
-		Instances instance = new Instances(reader);
-
-	     
-		
-		 if (instance.classIndex() == -1)
-		 {
-			 instance.setClassIndex(instance.numAttributes() - 1); 
-		 }
-		   
-		 return instance;
-	}
-	
-	/**
-	 * Evaluate the data based on the model passed as parameter.
-	 * @param model
-	 * @param data
-	 * @return The decision taken by the evaluation for each instance
-	 * @throws Exception
-	 */
-	public static String evaluate(Classifier model, Instances data) throws Exception
-	{
-		String returnVal = "";
-		 Iterator<Instance> it = data.iterator();
-		 while (it.hasNext())
-		 {
-			returnVal += (int) model.classifyInstance(it.next()) + System.lineSeparator();
-		 }	
-		 
-		 return returnVal;
-	}
-	public static void writeToFile(String filepath, String data) throws Exception
-	{
-		Writer writer = new BufferedWriter(new OutputStreamWriter(
-	              new FileOutputStream(filepath), "utf-8")); 
-		
-	   writer.write(data);
-	   writer.close();
-		
-	}
 	
 
 }
