@@ -2,8 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/ignacebertrand/Documents/java Repository/GTI770_LaboFinal/libsvm.jar"/>
-	<classpathentry kind="lib" path="C:/Users/ignacebertrand/Documents/java Repository/GTI770_LaboFinal/weka.jar"/>
-	<classpathentry kind="lib" path="C:/Users/ignacebertrand/Documents/java Repository/GTI770_LaboFinal/weka-src.jar"/>
+	<classpathentry kind="lib" path="weka.jar"/>
+	<classpathentry kind="lib" path="weka-src.jar"/>
+	<classpathentry kind="lib" path="libSVM.jar"/>
+	<classpathentry kind="lib" path="LibSVM_new.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
