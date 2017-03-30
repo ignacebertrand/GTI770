@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 import weka.classifiers.Classifier;
 import weka.classifiers.meta.Vote;
 import weka.core.Instances;
@@ -11,23 +14,30 @@ public class MainMultiple {
 		if (args.length!= 3)
 		{
 			System.out.println("usage: fichier-entrée1.arff fichier-entrée2.arff fichier-sortie-single.txt ");
+			System.exit(1);
 		}
 		String filePathInput1 = args[0];
 		String filePathInput2 = args[1];
 		String filePathOutput = args[2];
-		String trainingFilePath = "trainingFile.arff";
 		
-		Instances i1 = DataFileManager.readData(filePathInput1);
-		//Classifier c1 = Strategy.getSVMClassifier();
-		//DataFileManager.writeToFile(filePathOutput,Strategy.evaluate(c1, i1));
+		Instances i1 = DataFileManager.readData(filePathInput1); // TODO model SVM with c = 1 30% data
+		Classifier c1 = Strategy.getSVMClassifier();
 
+		Instances i2 = DataFileManager.readData(filePathInput2); // TODO model KNN with k = 1 30% data
+		Classifier c2 = Strategy.getKNNClassifier();
 		
-		Instances i2 = DataFileManager.readData(filePathInput2);
-		//Classifier c2 = Strategy.getSVMClassifier();
-		//DataFileManager.writeToFile(filePathOutput,Strategy.evaluate(c2, i2));
 		
-		Classifier multiClassifier = Strategy.merge2MainClassifierWithDefaultTrainingData();
-		DataFileManager.writeToFile(filePathOutput,Strategy.evaluate(multiClassifier, Instances.mergeInstances(i1, i2)));
+		Instances i3 = DataFileManager.readData(filePathInput2); // TODO model KNN with k=5 30% data
+		Classifier c3 = Strategy.getSVMClassifier2();
+		
+		
+		if (i1.numInstances()!= i2.numInstances() && i1.numInstances() != i3.numInstances())
+		{
+			System.out.println("You need the same amount of instances on all files.");
+			System.exit(1);
+		}
+		
+		DataFileManager.writeToFile(filePathOutput,Strategy.EvaluateWithVote(new Classifier[]{c1,/*c2,*/c3},new Instances[]{i1/*,i2*/,i3}));
 		
 	}
 

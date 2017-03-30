@@ -1,56 +1,11 @@
-import java.util.Iterator;
-
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.LibSVM;
 import weka.classifiers.lazy.IBk;
-import weka.classifiers.meta.Vote;
-import weka.classifiers.trees.J48;
-import weka.core.Attribute;
-import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.SelectedTag;
 import weka.core.SerializationHelper;
-import weka.core.Tag;
-import weka.gui.Main;
 
 public class Strategy {
-	/*public static Classifier strategyKNN(Instances... set) throws Exception {
-		Classifier[] classifiers = new Classifier[set.length];
-		
-		for (int i=0; i<set.length; i++) {
-			Instances inst = set[i];
-			IBk ibk = new IBk();
-			ibk.setOptions(new String[]{ "-K", "3", "-W", "0", "-A", "weka.core.neighboursearch.LinearNNSearch -A \"weka.core.EuclideanDistance -R first-last\"" });
-			
-			Classifier classifier = new AttributeClassifier(ibk);
-			classifier.buildClassifier(inst);
-			classifiers[i] = classifier;
-		}
-		
-		Vote vote = new Vote();
-		vote.setClassifiers(classifiers);
-		return vote;
-	}*/
-	
-	/*public static Classifier strategyBayes(Instances... set) throws Exception {
-		Classifier[] classifiers = new Classifier[set.length];
-		
-		for (int i=0; i<set.length; i++) {
-			Instances inst = set[i];
-			NaiveBayes bayes = new NaiveBayes();
-			bayes.setOptions(new String[]{ "-D" });
-			
-			Classifier classifier = new AttributeClassifier(bayes);
-			classifier.buildClassifier(inst);
-			classifiers[i] = classifier;
-		}
-		
-		Vote vote = new Vote();
-		vote.setClassifiers(classifiers);
-		return vote;
-	}*/
 	
 	public static void evaluateModel(Classifier model, Instances trainingData, Instances dataToClassify) throws Exception
 	{
@@ -58,84 +13,21 @@ public class Strategy {
 		eval.evaluateModel(model, dataToClassify);
 		System.out.println(eval.toSummaryString("\nResults\n======\n", false));
 	}
-	public static Classifier merge2MainClassifierWithDefaultTrainingData() throws Exception
-	{
-		
-		Instances trainingData = DataFileManager.readData("trainingData.arff");
-		
-		// build ibk classifier
-		IBk ibk = new IBk();
-		ibk.setOptions(new String[]{ "-K", "1"});
-		//ibk.buildClassifier(trainingData);
-		
-		//build svm classifier
-		LibSVM svm = new LibSVM();
-		svm.setOptions(new String[]{ "-C", "5", "-K", "0"});
-		//svm.buildClassifier(trainingData);
-		
-		Vote v = new Vote();
-		Classifier[] classifiers = new Classifier[2];
-		classifiers[1] = ibk;
-		classifiers[2] = svm;
-		v.setClassifiers(classifiers);
-		Tag[] tag = new Tag[1];
-		Tag tmp = new Tag();
-		tmp.setID(0);
-		tmp.setIDStr("Avg");
-		tag[0] = tmp;
-		
 	
-		SelectedTag ste = new SelectedTag(0, tag);
-		v.setCombinationRule(ste);
-		v.buildClassifier(trainingData); // Don't know if good or not
-		//DataFileManager.writeToFile(filePathOutput,Strategy.evaluate(v, Instances.mergeInstances(i1, i2)));
-		return v;
-		
-	}
-	
-	public static String classifyWithDefaultTrainingSet_KNN(Instances dataToClassify) throws Exception
-	{
-		Instances trainingData = DataFileManager.readData("trainingData.arff");
-		IBk ibk = new IBk();
-		ibk.setOptions(new String[]{ "-K", "1"});
-		ibk.buildClassifier(trainingData);
-		
-		String returnVal = "";
-		 for (int i = 0; i < dataToClassify.numInstances(); i++)
-		 {
-			returnVal += (int) ibk.classifyInstance(dataToClassify.instance(i)) + System.lineSeparator(); 		 
-		 }
-		 
-		 return returnVal;
-	}
-	
-	public static String classifyWithDefaultTrainingSet_SVM(Instances dataToClassify) throws Exception
-	{
-		Instances trainingData = DataFileManager.readData("trainingData.arff");
-		LibSVM svm = new LibSVM();
-		svm.setOptions(new String[]{ "-C", "5", "-K", "0"});
-		svm.buildClassifier(trainingData);
-		//evaluateModel(svm, trainingData, dataToClassify);
-		
-		String returnVal = "";
-		 for (int i = 0; i < dataToClassify.numInstances(); i++)
-		 {
-			 returnVal += (int) svm.classifyInstance(dataToClassify.instance(i)) + System.lineSeparator(); 
-		 } 
-		 
-		 return returnVal;
-	}
 	
 	public static Classifier getSVMClassifier() throws Exception {
-		Classifier SVMClassifier  =  (LibSVM) SerializationHelper.read("SVM_C_5_10PercentData.model"); //SVM_C_5_classifier.model
+		Classifier SVMClassifier  =  (LibSVM) SerializationHelper.read("SVM_C_5_10%.model"); //SVM_C_5_classifier.model
+		return SVMClassifier;
+	}
+	
+	public static Classifier getSVMClassifier2() throws Exception {
+		Classifier SVMClassifier  =  (LibSVM) SerializationHelper.read("SVM_c_5_10%_diffData.model"); //SVM_C_5_classifier.model
 		return SVMClassifier;
 	}
 	
 	public static Classifier getKNNClassifier() throws Exception
-	{
-		
+	{	
 		Classifier KNNClassifier  =  (IBk) SerializationHelper.read("KNN_k_1_10PercentDataWekaOld.model");
-		//Classifier KNNClassifier  =  (IBk) SerializationHelper.read(Main.class.getClass().getResourceAsStream("/Project/KNN_k_1_classifier.model"));
 		return KNNClassifier;
 	}
 	
@@ -158,20 +50,50 @@ public class Strategy {
 	}
 	
 	/**
-	 * Evaluate the data based on the model passed as parameter.
+	 * Use a voting system to classify the instance. The result that was voted by the most instances will be taken.
 	 * @param model
 	 * @param data
 	 * @return The decision taken by the evaluation for each instance
 	 * @throws Exception
 	 */
-	public static String evaluate(Vote v, Instances data) throws Exception
+	public static String EvaluateWithVote(Classifier[] model, Instances[] data) throws Exception
 	{
 		String returnVal = "";
-		 for (int i = 0; i < data.numInstances(); i++)
-		 {
-			 returnVal += (int) v.classifyInstance(data.instance(i)) + System.lineSeparator(); 
-		 }
+		int resultToFind;
+		int countResult = 0;
+		int bestCount = 0;
+		int bestResult = 0;
+		int[] results = new int[model.length];
+		for (int i = 0; i < data[0].numInstances(); i++)
+		 { 
 		 
-		 return returnVal;
+		for (int j = 0; j < model.length; j++)
+		{
+			results[j] = (int)model[j].classifyInstance(data[j].instance(i));
+		}
+		
+		for (int k = 0; k < results.length; k++)
+		{
+			resultToFind = results[k];
+			for (int l = 0; l < results.length; l++)
+			{
+				if (results[l] == resultToFind)
+				{
+					countResult++;
+				}
+				if (countResult > bestCount)
+				{
+					bestResult = resultToFind;
+				}
+			}
+			
+		}
+		returnVal += bestResult + System.lineSeparator();
+		bestResult = 0;
+		countResult = 0;
+		bestCount = 0;
+		 }
+		return returnVal;
 	}
+	
 }

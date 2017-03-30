@@ -16,17 +16,10 @@ public class mainSingle {
 		String filePathInput = args[0];
 		String filePathOutput = args[1];
 		
-		//Classifier bestModel  =  (J48) SerializationHelper.read(Main.class.getClass().getResourceAsStream("/Project/algoPerformantModel.model"));
-		//Classifier worstModel  =  (NaiveBayes) SerializationHelper.read(Main.class.getClass().getResourceAsStream("/Project/pireAlgoModel.model"));
-		
-		// Just for quick early tests
-		//RemovePercentage removeData = new RemovePercentage();
-		//removeData.setOptions(new String[]{ "-P", "90" });
-		
-	//	Instances i = DataFileManager.readData(filePathInput);
-	//	DataFileManager.writeToFile(filePathOutput,Strategy.classifyWithDefaultTrainingSet_SVM(i));
-		//Classifier c = Strategy.getKNNClassifier();
-		//DataFileManager.writeToFile(filePathOutput,Strategy.evaluate(c, i));
+		Classifier c = Strategy.getSVMClassifier();
+		Instances i = DataFileManager.readData(filePathInput);
+		//Strategy.evaluateModel(c,trainindData,i);
+		DataFileManager.writeToFile(filePathOutput,Strategy.evaluate(c, i));
 		
 
 	}
