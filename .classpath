@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="weka.jar"/>
 	<classpathentry kind="lib" path="weka-src.jar"/>
-	<classpathentry kind="lib" path="libSVM.jar"/>
 	<classpathentry kind="lib" path="LibSVM_new.jar"/>
+	<classpathentry kind="lib" path="libsvm.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -16,7 +16,7 @@ public class Strategy {
 	
 	
 	public static Classifier getSVMClassifier() throws Exception {
-		Classifier SVMClassifier  =  (LibSVM) SerializationHelper.read("SVM_C_5_10%.model"); //SVM_C_5_classifier.model
+		Classifier SVMClassifier  =  (LibSVM) SerializationHelper.read("SVM_c_5_linear_30%.model"); //SVM_C_5_classifier.model
 		return SVMClassifier;
 	}
 	
