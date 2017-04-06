@@ -13,15 +13,15 @@ import weka.gui.SelectedTagEditor;
 public class MainMultiple {
 
 	public static void main(String[] args) throws Exception {
-		if (args.length!= 4)
+		if (args.length!= 2)
 		{
-			System.out.println("usage: fichier-entrée1.arff fichier-entrée2.arff fichier-entrée3.arff fichier-sortie-single.txt ");
+			System.out.println("usage: fichier-entrée1.arff fichier-sortie-single.txt ");
 			System.exit(1);
 		}
 		String filePathInput1 = args[0];
-		String filePathInput2 = args[1];
-		String filePathInput3 = args[2];
-		String filePathOutput = args[3];
+		String filePathInput2 = args[0];
+		String filePathInput3 = args[0];
+		String filePathOutput = args[1];
 		
 		Instances i1 = DataFileManager.readData(filePathInput1); // TODO model SVM with c = 1 30% data
 		Classifier c1 = Strategy.getSVMClassifier("SVM_c_1_linear_30%.model");
