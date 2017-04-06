@@ -13,7 +13,7 @@ import weka.gui.SelectedTagEditor;
 public class MainMultiple {
 
 	public static void main(String[] args) throws Exception {
-		if (args.length!= 3)
+		if (args.length!= 4)
 		{
 			System.out.println("usage: fichier-entrée1.arff fichier-entrée2.arff fichier-entrée3.arff fichier-sortie-single.txt ");
 			System.exit(1);
