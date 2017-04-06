@@ -97,7 +97,7 @@ public class Strategy {
 		int bestCount = 0;
 		int bestResult = 0;
 		int[] results = new int[model.length];
-		for (int i = 0; i < data[0].numInstances(); i++)
+		for (int i = evaluateMethodIndex; i < data[0].numInstances(); i++)
 		 { 
 			if (i%8000 == 0 && i!=0 && !firsRound)
 			 {
