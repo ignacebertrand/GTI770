@@ -1,10 +1,14 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,11 +72,17 @@ public class DataFileManager {
 	
 	public static void writeToFile(String filepath, String data) throws Exception
 	{
-		Writer writer = new BufferedWriter(new OutputStreamWriter(
-	              new FileOutputStream(filepath), "utf-8")); 
+	//	Writer writer = new BufferedWriter(new OutputStreamWriter(
+	   //           new FileOutputStream(filepath), "utf-8")); 
+		File file = new File(filepath);
+		if (!file.exists())		
+			file.createNewFile();
 		
-	   writer.write(data);
-	   writer.close();
+		Files.write(Paths.get(filepath), data.getBytes(), StandardOpenOption.APPEND);	
+		
+		
+	//   writer.write(data);
+	 //  writer.close();
 		
 	}
 
