@@ -15,12 +15,13 @@ public class MainMultiple {
 	public static void main(String[] args) throws Exception {
 		if (args.length!= 3)
 		{
-			System.out.println("usage: fichier-entrée1.arff fichier-entrée2.arff fichier-sortie-single.txt ");
+			System.out.println("usage: fichier-entrée1.arff fichier-entrée2.arff fichier-entrée3.arff fichier-sortie-single.txt ");
 			System.exit(1);
 		}
 		String filePathInput1 = args[0];
 		String filePathInput2 = args[1];
-		String filePathOutput = args[2];
+		String filePathInput3 = args[2];
+		String filePathOutput = args[3];
 		
 		Instances i1 = DataFileManager.readData(filePathInput1); // TODO model SVM with c = 1 30% data
 		Classifier c1 = Strategy.getSVMClassifier("SVM_c_1_linear_30%.model");
@@ -29,7 +30,7 @@ public class MainMultiple {
 		Classifier c2 = Strategy.getSVMClassifier("SVM_c_5_linear_30%.model");
 		
 		
-		Instances i3 = DataFileManager.readData(filePathInput2); // TODO model KNN with k=5 30% data
+		Instances i3 = DataFileManager.readData(filePathInput3); // TODO model KNN with k=5 30% data
 		Classifier c3 = Strategy.getKNNClassifier("KNN_k_1_linear.model");
 		
 		
